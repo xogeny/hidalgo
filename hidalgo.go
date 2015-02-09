@@ -43,13 +43,13 @@ ADD server_linux64 /usr/local/bin/server_linux64
 ENV {{$key}} {{$value}}
 {{end}}
 
-# Run the executable
-ENTRYPOINT /usr/local/bin/server_linux64
-
 # Expose any ports required
 {{range $value := .ports}}
 EXPOSE {{$value}}
 {{end}}
+
+# Run the executable
+CMD ["/usr/local/bin/server_linux64"]
 `
 
 // Options is a structure used to describe the various command line
@@ -296,9 +296,8 @@ func main() {
 		log.Printf("Build of %s successful", name)
 	}
 
-	// Assume we will start from the "busybox" Docker image...
-	// TODO: I'd like to make this work with "scratch" at some point
-	from := "busybox"
+	// Assume we will start from the "scratch" Docker image...
+	from := "scratch"
 	if Options.From != "" {
 		// ...unless one is explicitly specified
 		from = Options.From
