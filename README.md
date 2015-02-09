@@ -46,6 +46,93 @@ $ hidalgo -t htest/hello ./examples/hello
 
 This will build an image for the `hello` application tag it with `htest/hello`.
 
+## Configuration
+
+It turns out that there are a number of options you might want to
+specify when running `hidalgo`.  You can see some of them by just
+running:
+
+```
+$ hidalgo -h
+Usage:
+  hidalgo [OPTIONS] [Directory]
+
+Application Options:
+  -d, --docker=    Docker command (sdocker)
+  -t, --tag=       Name to tag image with
+  -f, --from=      Docker image to build FROM
+  -b, --builddir=  Directory for Docker build
+  -k, --keep       Keep Docker build directory
+  -v, --verbose    Verbose output
+  -n, --dryrun     Suppress docker build
+
+Help Options:
+  -h, --help       Show this help message
+
+Arguments:
+  Directory:       Directory of Go package to build
+```
+
+But there are more configuration options.
+
+By default, when you run `hidalgo` it will resolve the directory that
+the package you are attempting to build is stored in.  It will look
+for a configuration file named `hidalgo.cfg` in that directory (the
+directory where a `go build` would be performed).  It then reads that
+file information about:
+
+### Ports
+
+If your application requires ports to be exposed, you can list them in
+the `hidalgo.cfg` file, e.g.,
+
+```
+port 8080;
+```
+
+This is then turned into `EXPOSE` commands in the generated `Dockerfile`.
+
+### Environment Variables
+
+When I build Docker images, I am careful to avoid keeping credential
+information in any files that are version controlled or otherwise
+distributed.  As such, much of my code relies on environment variables
+being specified.  Of course, this can always be done with the `-e`
+switch when doing executing `docker run`.  But I like to create images
+that are easy to spin up.  So you can specify relevant environment
+variables in `hidalgo.cfg` as follows:
+
+```
+env AWS_CLIENT_KEY;
+env AWS_SECRET_KEY;
+```
+
+If those environment variables are set (i.e., in the environment) when
+`hidalgo` is run, it will add them to the `Dockerfile` using the `ENV`
+directive.  This means they will get "baked" into the `Dockerfile`.
+**Note, you should only do this if you will not be publishing the
+resulting `Dockerfile`**.  In other words, use this feature with
+caution and understand whatever opportunities for "leaking"
+credentials might result.
+
+## Docker client
+
+By default, `hidalgo` uses
+[`sdocker`](http://github.com/xogeny/sdocker) as the Docker client.
+This can be changed on the command line by using the `-d` command line
+flag, e.g.,
+
+```
+$ hidalgo -d docker
+```
+
+The reason I use `sdocker` is that it is effectively a drop-in
+replacement for `docker` that includes support for working with remote
+Docker hosts via SSH.  Since I do my development work on OSX, this is
+a really useful feature which is why I made it the default.  If people
+really find this annoying in the future, I'd consider adding some kind
+of `~/.hidalgo` file where you could specify your global preferences.
+
 ## Installation
 
 To install `hidalgo`, all you should need to do is run:
