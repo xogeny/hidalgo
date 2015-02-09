@@ -61,7 +61,7 @@ capabilities built.  If you are using Homebrew, this running something like:
 brew upgrade go --cross-compile-common
 ```
 
-I'm not sure about Windows or Linux, but I'm sure it isn't very hard.
+I'm not sure about Windows, but I'm sure it isn't very hard.
 
 ## References
 
