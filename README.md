@@ -44,7 +44,12 @@ the `hidalgo` source directory, you can do this:
 $ hidalgo -t htest/hello ./examples/hello
 ```
 
-This will build an image for the `hello` application tag it with `htest/hello`.
+This will build an image for the `hello` application tag it with
+`htest/hello`.  Then the application can be run as:
+
+```
+$ docker run htest/hello
+```
 
 ## Configuration
 
