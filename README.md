@@ -180,7 +180,7 @@ using Hidalgo or performing cross-compilation):
 
 ...you may have run into it.  Please note, this is not a bug in
 Hidalgo (you can confirm this by simply setting `GOOS` to `linux` and
-`GOARCH` to `amd64` and trying to do a `go build` yourself.
+`GOARCH` to `amd64` and trying to do a `go build` yourself).
 
 ## References
 

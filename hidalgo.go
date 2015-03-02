@@ -392,10 +392,18 @@ func main() {
 		}
 		sbuild := exec.Command(dcmd, args...)
 
+		if Options.Verbose {
+			log.Printf("  Complete build command: '%s'", cmdString(sbuild))
+		}
+
 		// We also need to tar up our build directory to pass it to
 		// Docker.  This handles the case where the build is actually
 		// being performed on a remote machine.
 		tar := exec.Command("tar", "zcf", "-", ".")
+
+		if Options.Verbose {
+			log.Printf("  Complete tar command: '%s'", cmdString(tar))
+		}
 
 		// Create a pipe from tar to build
 		reader, writer := io.Pipe()
