@@ -189,6 +189,11 @@ func main() {
 		pdir = Options.Positional.Directory
 	}
 
+	if os.Getenv("DOCKER_HOST") == "" {
+		fmt.Printf("You must set the DOCKER_HOST environment variable")
+		os.Exit(1)
+	}
+
 	// Get the absolute directory path and package name
 	apdir, name, err := packageName(pdir)
 	if err != nil {
