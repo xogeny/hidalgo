@@ -286,9 +286,10 @@ func main() {
 
 	// Build the static Go executable
 	build := exec.Command("go", "build", "-o", "server_linux64", name)
-	err = build.Run()
+
+	output, err := build.CombinedOutput()
 	if err != nil {
-		log.Printf("Error running cmd '%s': %v", cmdString(build), err)
+		log.Printf("Error running cmd '%s':\n%s\n%v", cmdString(build), output, err)
 		os.Exit(3)
 	}
 
