@@ -157,6 +157,31 @@ brew upgrade go --cross-compile-common
 
 I'm not sure about Windows, but I'm sure it isn't very hard.
 
+## Known Issues
+
+I ran across a strange issue when working with Hidalgo.  There are
+cases where the Go compiler will raise errors when cross-compiling but
+not when performing normal (native) compilations.  This impacts
+Hidalgo since it performs cross-compilations behind the scenes.  The
+specific issue I ran into (which is discussed
+[here](https://groups.google.com/forum/#!topic/golang-nuts/XYoBvsrvyRA)
+and
+[here](https://groups.google.com/forum/#!topic/golang-nuts/rPhnLR9OmLI))
+was related to method declarations in separate files from their
+receiver types.  According to the
+[Golang specification](https://golang.org/ref/spec#Method_declarations)
+this is legal, but it generates an error during cross compilation.  So
+if you get an error that looks something like this (but only when
+using Hidalgo or performing cross-compilation):
+
+```
+.../FileWithMethod.go:10: undefined: ReceiverType
+```
+
+...you may have run into it.  Please note, this is not a bug in
+Hidalgo (you can confirm this by simply setting `GOOS` to `linux` and
+`GOARCH` to `amd64` and trying to do a `go build` yourself.
+
 ## References
 
 A similar effort to create a Docker container that builds Docker
