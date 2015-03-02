@@ -1,3 +1,5 @@
+![HidalgoLogo](https://rawgithub.com/xogeny/hidalgo/master/hidalgo.svg)
+
 # Hidalgo
 
 One of the great things about Golang is that you can build statically
